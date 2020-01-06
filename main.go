@@ -1,14 +1,16 @@
 package main
 
 import (
-	"image"
-	"os"
-
 	_ "image/png"
 
+	"github.com/SpacedMonkeyTCT/connect-four/sprites"
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 	"golang.org/x/image/colornames"
+)
+
+const (
+	tileSize = 32
 )
 
 func main() {
@@ -26,49 +28,28 @@ func connectFour() {
 		panic(err)
 	}
 
-	pic, err := loadPicture("tiles.png")
-	if err != nil {
-		panic(err)
-	}
+	tiles := sprites.New("tiles.png", tileSize)
 
-	redTokenRect := pixel.R(0, 32, 32, 64)
-	redTokenSprite := pixel.NewSprite(pic, redTokenRect)
-
-	blueTokenRect := pixel.R(32, 32, 64, 64)
-	blueTokenSprite := pixel.NewSprite(pic, blueTokenRect)
-
-	boardTileRect := pixel.R(32, 0, 64, 32)
-	boardTileSprite := pixel.NewSprite(pic, boardTileRect)
+	redToken := tiles.Get(0, 1)
+	blueToken := tiles.Get(1, 1)
+	boardTile := tiles.Get(1, 0)
 
 	win.Clear(colornames.Skyblue)
-	redTokenSprite.Draw(win, pixel.IM.Moved(pixel.V(32, win.Bounds().H()-24)))
-	blueTokenSprite.Draw(win, pixel.IM.Moved(pixel.V(win.Bounds().W()-32, win.Bounds().H()-24)))
+	redToken.Draw(win, pixel.IM.Moved(pixel.V(tileSize, win.Bounds().H()-tileSize)))
+	blueToken.Draw(win, pixel.IM.Moved(pixel.V(win.Bounds().W()-tileSize, win.Bounds().H()-tileSize)))
 
 	boardPos := pixel.V(64, win.Bounds().H()-72)
 
 	for v := 0; v < 6; v++ {
 		for u := 0; u < 7; u++ {
-			xOff := 32 * u
-			yOff := 32 * -v
+			xOff := tileSize * u
+			yOff := tileSize * -v
 			pos := pixel.V(float64(xOff), float64(yOff))
-			boardTileSprite.Draw(win, pixel.IM.Moved(boardPos).Moved(pos))
+			boardTile.Draw(win, pixel.IM.Moved(boardPos).Moved(pos))
 		}
 	}
 
 	for !win.Closed() {
 		win.Update()
 	}
-}
-
-func loadPicture(path string) (pixel.Picture, error) {
-	file, err := os.Open(path)
-	if err != nil {
-		return nil, err
-	}
-	defer file.Close()
-	img, _, err := image.Decode(file)
-	if err != nil {
-		return nil, err
-	}
-	return pixel.PictureDataFromImage(img), nil
 }
