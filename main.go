@@ -3,6 +3,7 @@ package main
 import (
 	_ "image/png"
 
+	"github.com/SpacedMonkeyTCT/connect-four/board"
 	"github.com/SpacedMonkeyTCT/connect-four/sprites"
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
@@ -10,6 +11,8 @@ import (
 )
 
 const (
+	width    = 7
+	height   = 6
 	tileSize = 32
 )
 
@@ -20,7 +23,7 @@ func main() {
 func connectFour() {
 	cfg := pixelgl.WindowConfig{
 		Title:  "Connect Four",
-		Bounds: pixel.R(0, 0, tileSize*10, tileSize*9),
+		Bounds: pixel.R(0, 0, tileSize*(width+3), tileSize*(height+3)),
 		VSync:  true,
 	}
 	win, err := pixelgl.NewWindow(cfg)
@@ -28,26 +31,19 @@ func connectFour() {
 		panic(err)
 	}
 
+	win.Clear(colornames.Skyblue)
+
 	tiles := sprites.New("tiles.png", tileSize)
 
 	redToken := tiles.Get(0, 1)
-	blueToken := tiles.Get(1, 1)
-	boardTile := tiles.Get(1, 0)
-
-	win.Clear(colornames.Skyblue)
 	redToken.Draw(win, pixel.IM.Moved(pixel.V(tileSize, win.Bounds().H()-tileSize)))
+
+	blueToken := tiles.Get(1, 1)
 	blueToken.Draw(win, pixel.IM.Moved(pixel.V(win.Bounds().W()-tileSize, win.Bounds().H()-tileSize)))
 
-	boardPos := pixel.V(tileSize*2, win.Bounds().H()-tileSize*2.25)
-
-	for v := 0; v < 6; v++ {
-		for u := 0; u < 7; u++ {
-			xOff := tileSize * u
-			yOff := tileSize * -v
-			pos := pixel.V(float64(xOff), float64(yOff))
-			boardTile.Draw(win, pixel.IM.Moved(boardPos).Moved(pos))
-		}
-	}
+	boardTile := tiles.Get(1, 0)
+	b := board.New(width, height, tileSize, boardTile)
+	b.Draw(win)
 
 	for !win.Closed() {
 		win.Update()
