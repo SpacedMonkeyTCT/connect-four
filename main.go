@@ -20,7 +20,7 @@ func main() {
 func connectFour() {
 	cfg := pixelgl.WindowConfig{
 		Title:  "Connect Four",
-		Bounds: pixel.R(0, 0, 320, 288),
+		Bounds: pixel.R(0, 0, tileSize*10, tileSize*9),
 		VSync:  true,
 	}
 	win, err := pixelgl.NewWindow(cfg)
@@ -38,7 +38,7 @@ func connectFour() {
 	redToken.Draw(win, pixel.IM.Moved(pixel.V(tileSize, win.Bounds().H()-tileSize)))
 	blueToken.Draw(win, pixel.IM.Moved(pixel.V(win.Bounds().W()-tileSize, win.Bounds().H()-tileSize)))
 
-	boardPos := pixel.V(64, win.Bounds().H()-tileSize*2.25)
+	boardPos := pixel.V(tileSize*2, win.Bounds().H()-tileSize*2.25)
 
 	for v := 0; v < 6; v++ {
 		for u := 0; u < 7; u++ {
