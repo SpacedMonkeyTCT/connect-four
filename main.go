@@ -38,7 +38,7 @@ func connectFour() {
 	redToken.Draw(win, pixel.IM.Moved(pixel.V(tileSize, win.Bounds().H()-tileSize)))
 	blueToken.Draw(win, pixel.IM.Moved(pixel.V(win.Bounds().W()-tileSize, win.Bounds().H()-tileSize)))
 
-	boardPos := pixel.V(64, win.Bounds().H()-72)
+	boardPos := pixel.V(64, win.Bounds().H()-tileSize*2.25)
 
 	for v := 0; v < 6; v++ {
 		for u := 0; u < 7; u++ {
