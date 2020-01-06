@@ -18,7 +18,7 @@ func main() {
 func connectFour() {
 	cfg := pixelgl.WindowConfig{
 		Title:  "Connect Four",
-		Bounds: pixel.R(0, 0, 1024, 768),
+		Bounds: pixel.R(0, 0, 320, 288),
 		VSync:  true,
 	}
 	win, err := pixelgl.NewWindow(cfg)
@@ -31,25 +31,25 @@ func connectFour() {
 		panic(err)
 	}
 
-	win.Clear(colornames.Skyblue)
-
 	redTokenRect := pixel.R(0, 32, 32, 64)
 	redTokenSprite := pixel.NewSprite(pic, redTokenRect)
-	redTokenSprite.Draw(win, pixel.IM.Moved(pixel.V(64, 734)))
 
 	blueTokenRect := pixel.R(32, 32, 64, 64)
 	blueTokenSprite := pixel.NewSprite(pic, blueTokenRect)
-	blueTokenSprite.Draw(win, pixel.IM.Moved(pixel.V(256, 734)))
 
 	boardTileRect := pixel.R(32, 0, 64, 32)
 	boardTileSprite := pixel.NewSprite(pic, boardTileRect)
 
-	boardPos := pixel.V(64, 702)
+	win.Clear(colornames.Skyblue)
+	redTokenSprite.Draw(win, pixel.IM.Moved(pixel.V(32, win.Bounds().H()-24)))
+	blueTokenSprite.Draw(win, pixel.IM.Moved(pixel.V(win.Bounds().W()-32, win.Bounds().H()-24)))
+
+	boardPos := pixel.V(64, win.Bounds().H()-72)
 
 	for v := 0; v < 6; v++ {
 		for u := 0; u < 7; u++ {
 			xOff := 32 * u
-			yOff := -32 * v
+			yOff := 32 * -v
 			pos := pixel.V(float64(xOff), float64(yOff))
 			boardTileSprite.Draw(win, pixel.IM.Moved(boardPos).Moved(pos))
 		}
