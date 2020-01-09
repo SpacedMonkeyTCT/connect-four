@@ -43,3 +43,7 @@ func (s Sprites) Get(x, y int) *pixel.Sprite {
 	rect := pixel.R(u, v, u+float64(s.tileSize), v+float64(s.tileSize))
 	return pixel.NewSprite(s.pic, rect)
 }
+
+func (s Sprites) TileSize() int {
+	return s.tileSize
+}
