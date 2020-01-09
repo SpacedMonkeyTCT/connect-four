@@ -1,7 +1,8 @@
 package main
 
 import (
-	_ "image/png"
+	"fmt"
+	"time"
 
 	"github.com/SpacedMonkeyTCT/connect-four/board"
 	"github.com/SpacedMonkeyTCT/connect-four/gui"
@@ -24,7 +25,22 @@ func connectFour() {
 	b := board.New(width, height)
 	g := gui.New(tiles, b)
 
-	for !g.Closed() {
+	player := board.Red
+	move := 0
+
+	for last := time.Now(); !g.Closed(); {
+		_ = time.Since(last).Seconds()
+		last = time.Now()
+
+		if g.TokenDropping() {
+			g.MoveToken()
+		} else {
+			move = g.CheckForMove()
+			if move > 0 {
+				fmt.Println("swapped")
+				player = player.Swap()
+			}
+		}
 		g.DrawBoard()
 		g.Update()
 	}
