@@ -22,7 +22,7 @@ func newBoard(win *pixelgl.Window, width, height int, tile *pixel.Sprite) board 
 	windowWidth := wb.W()
 	windowHeight := wb.H()
 
-	size := tile.Picture().Bounds().W()
+	size := tile.Frame().W()
 	boardWidth := float64(width) * size
 	boardHeight := float64(height) * size
 
@@ -58,7 +58,7 @@ func (b board) CheckForMove() int {
 func (b board) Update() {
 	for x := b.rect.Min.X; x < b.rect.Max.X; x += b.tileSize {
 		for y := b.rect.Min.Y; y < b.rect.Max.Y; y += b.tileSize {
-			pos := pixel.V(x, y)
+			pos := pixel.V(x+tileSize/2, y+tileSize/2)
 			b.tile.Draw(b.win, pixel.IM.Moved(pos))
 		}
 	}

@@ -20,7 +20,7 @@ const (
 func New() *GUI {
 	cfg := pixelgl.WindowConfig{
 		Title:  "Connect Four",
-		Bounds: pixel.R(0, 0, float64(tileSize*width+3), float64(tileSize*height+3)),
+		Bounds: pixel.R(0, 0, float64(tileSize*(width+1)), float64(tileSize*(height+1))),
 		VSync:  true,
 	}
 	win, err := pixelgl.NewWindow(cfg)
