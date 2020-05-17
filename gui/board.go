@@ -28,7 +28,7 @@ func newBoard(win *pixelgl.Window, width, height int, tile *pixel.Sprite) board 
 
 	xoff := math.Max(0, (windowWidth-boardWidth)/2.0)
 	yoff := math.Max(0, (windowHeight-boardHeight)/2.0)
-	rect := pixel.R(xoff, yoff, boardWidth, boardHeight)
+	rect := pixel.R(xoff, yoff, xoff+boardWidth, yoff+boardHeight)
 
 	return board{
 		win:      win,

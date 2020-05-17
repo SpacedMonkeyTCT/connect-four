@@ -43,6 +43,10 @@ func (g *GUI) Closed() bool {
 	return g.win.Closed()
 }
 
+func (g *GUI) CheckForMove() int {
+	return g.board.CheckForMove()
+}
+
 func (g *GUI) Update() {
 	g.board.Update()
 	g.win.Update()

@@ -18,6 +18,7 @@ func connectFour() {
 		_ = time.Since(last).Seconds()
 		last = time.Now()
 
+		_ = g.CheckForMove()
 		g.Update()
 	}
 }
