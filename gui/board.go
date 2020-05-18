@@ -17,7 +17,6 @@ type board struct {
 }
 
 func newBoard(win *pixelgl.Window, width, height int, tile *pixel.Sprite) board {
-
 	wb := win.Bounds()
 	windowWidth := wb.W()
 	windowHeight := wb.H()
@@ -62,4 +61,10 @@ func (b board) Update() {
 			b.tile.Draw(b.win, pixel.IM.Moved(pos))
 		}
 	}
+}
+
+func (b board) Pos(row, column int) pixel.Vec {
+	x := b.rect.Min.X + b.tileSize*float64(column)
+	y := b.rect.Min.Y + b.tileSize*float64(row)
+	return pixel.V(x-tileSize/2, y-tileSize/2)
 }

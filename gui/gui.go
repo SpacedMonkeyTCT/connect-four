@@ -7,8 +7,11 @@ import (
 )
 
 type GUI struct {
-	win   *pixelgl.Window
-	board board
+	win      *pixelgl.Window
+	board    board
+	redChip  chipFactory
+	blueChip chipFactory
+	chips    []chip
 }
 
 const (
@@ -31,9 +34,13 @@ func New() *GUI {
 	win.Clear(colornames.Skyblue)
 	t := newTiles("tiles.png", tileSize)
 	b := newBoard(win, width, height, t.get(1, 0))
+	rcf := newChipFactory(win, t.get(0, 1))
+	bcf := newChipFactory(win, t.get(1, 1))
 	g := GUI{
-		win:   win,
-		board: b,
+		win:      win,
+		board:    b,
+		redChip:  rcf,
+		blueChip: bcf,
 	}
 
 	return &g
@@ -48,6 +55,23 @@ func (g *GUI) CheckForMove() int {
 }
 
 func (g *GUI) Update() {
+	for _, c := range g.chips {
+		c.Update()
+	}
 	g.board.Update()
 	g.win.Update()
+}
+
+func (g *GUI) AddRedChip(row, column int) {
+	g.addChip(g.redChip, row, column)
+}
+
+func (g *GUI) AddBlueChip(row, column int) {
+	g.addChip(g.blueChip, row, column)
+}
+
+func (g *GUI) addChip(cf chipFactory, row, column int) {
+	pos := g.board.Pos(row, column)
+	c := cf.New(pos)
+	g.chips = append(g.chips, c)
 }
