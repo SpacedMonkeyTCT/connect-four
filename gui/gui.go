@@ -32,7 +32,7 @@ func New() *GUI {
 	}
 
 	win.Clear(colornames.Skyblue)
-	t := newTiles("tiles.png", tileSize)
+	t := newTileSet("tiles.png", tileSize)
 	b := newBoard(win, width, height, t.get(1, 0))
 	rcf := newChipFactory(win, t.get(0, 1))
 	bcf := newChipFactory(win, t.get(1, 1))
