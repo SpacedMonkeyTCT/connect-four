@@ -1,17 +1,17 @@
 package game
 
-type connectfour struct {
+type ConnectFour struct {
 	board   [][]int
 	players []int
 	player  int
 }
 
-func newConnectFour(width, height int, players ...int) connectfour {
+func NewConnectFour(width, height int, players ...int) ConnectFour {
 	b := make([][]int, height)
 	for i := range b {
 		b[i] = make([]int, width)
 	}
-	return connectfour{
+	return ConnectFour{
 		board:   b,
 		players: players,
 		player:  players[0],

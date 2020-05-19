@@ -3,6 +3,7 @@ package main
 import (
 	"time"
 
+	"github.com/SpacedMonkeyTCT/connect-four/game"
 	"github.com/SpacedMonkeyTCT/connect-four/gui"
 	"github.com/faiface/pixel/pixelgl"
 )
@@ -19,6 +20,7 @@ func main() {
 }
 
 func connectFour() {
+	_ = game.NewConnectFour(width, height, redPlayer, bluePlayer)
 	g := gui.New(width, height)
 	player := redPlayer
 
