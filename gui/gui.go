@@ -6,6 +6,10 @@ import (
 	"golang.org/x/image/colornames"
 )
 
+const (
+	tileSize = 32
+)
+
 type GUI struct {
 	win      *pixelgl.Window
 	board    board
@@ -14,13 +18,7 @@ type GUI struct {
 	chips    []chip
 }
 
-const (
-	width    = 7
-	height   = 6
-	tileSize = 32
-)
-
-func New() *GUI {
+func New(width, height int) *GUI {
 	cfg := pixelgl.WindowConfig{
 		Title:  "Connect Four",
 		Bounds: pixel.R(0, 0, float64(tileSize*(width+1)), float64(tileSize*(height+1))),

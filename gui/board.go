@@ -57,7 +57,7 @@ func (b board) CheckForMove() int {
 func (b board) Update() {
 	for x := b.rect.Min.X; x < b.rect.Max.X; x += b.tileSize {
 		for y := b.rect.Min.Y; y < b.rect.Max.Y; y += b.tileSize {
-			pos := pixel.V(x+tileSize/2, y+tileSize/2)
+			pos := pixel.V(x+b.tileSize/2, y+b.tileSize/2)
 			b.tile.Draw(b.win, pixel.IM.Moved(pos))
 		}
 	}
@@ -66,5 +66,5 @@ func (b board) Update() {
 func (b board) Pos(row, column int) pixel.Vec {
 	x := b.rect.Min.X + b.tileSize*float64(column)
 	y := b.rect.Min.Y + b.tileSize*float64(row)
-	return pixel.V(x-tileSize/2, y-tileSize/2)
+	return pixel.V(x-b.tileSize/2, y-b.tileSize/2)
 }

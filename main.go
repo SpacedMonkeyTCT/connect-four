@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/SpacedMonkeyTCT/connect-four/gui"
@@ -11,6 +10,8 @@ import (
 const (
 	redPlayer  = 1
 	bluePlayer = 2
+	width      = 7
+	height     = 6
 )
 
 func main() {
@@ -18,7 +19,7 @@ func main() {
 }
 
 func connectFour() {
-	g := gui.New()
+	g := gui.New(width, height)
 	player := redPlayer
 
 	for last := time.Now(); !g.Closed(); {
@@ -26,9 +27,8 @@ func connectFour() {
 		last = time.Now()
 
 		if move := g.CheckForMove(); move > 0 {
-			fmt.Println("Move:", move)
 			// check move is valid with game
-			row := height(move)
+			row := columnHeight(move)
 			if player == redPlayer {
 				g.AddRedChip(row, move)
 			} else {
@@ -47,7 +47,7 @@ func swapPlayer(player int) int {
 // for testing purposes
 var columns [8]int
 
-func height(c int) int {
+func columnHeight(c int) int {
 	columns[c]++
 	return columns[c]
 }
