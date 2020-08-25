@@ -29,7 +29,6 @@ func New(width, height int) *GUI {
 	if err != nil {
 		panic(err)
 	}
-	win.Clear(colornames.Skyblue)
 
 	winHeight := win.Bounds().H()
 	yOff := winHeight - float64(3*tileSize/4)
