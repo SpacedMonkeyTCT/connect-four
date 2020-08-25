@@ -17,7 +17,7 @@ type board struct {
 	chips    []*chip
 }
 
-func newBoard(win *pixelgl.Window, width, height int, tile *pixel.Sprite) *board {
+func NewBoard(win *pixelgl.Window, width, height int, tile *pixel.Sprite) *board {
 	wb := win.Bounds()
 	windowWidth := wb.W()
 	windowHeight := wb.H()
@@ -40,7 +40,7 @@ func newBoard(win *pixelgl.Window, width, height int, tile *pixel.Sprite) *board
 	}
 }
 
-func (b *board) CheckForMove() int {
+func (b board) CheckForMove() int {
 	if b.win.JustPressed(pixelgl.MouseButtonLeft) {
 
 		if b.rect.Contains(b.win.MousePosition()) {
@@ -55,7 +55,7 @@ func (b *board) CheckForMove() int {
 	return 0
 }
 
-func (b *board) Draw() {
+func (b board) Draw() {
 	for _, c := range b.chips {
 		c.Draw()
 	}
@@ -68,14 +68,14 @@ func (b *board) Draw() {
 	}
 }
 
-func (b *board) Pos(row, column int) pixel.Vec {
+func (b *board) AddChip(c *chip, row, column int) {
+	pos := b.pos(row, column)
+	c.SetPos(pos)
+	b.chips = append(b.chips, c)
+}
+
+func (b board) pos(row, column int) pixel.Vec {
 	x := b.rect.Min.X + b.tileSize*float64(column)
 	y := b.rect.Min.Y + b.tileSize*float64(row)
 	return pixel.V(x-b.tileSize/2, y-b.tileSize/2)
-}
-
-func (b *board) AddChip(c *chip, row, column int) {
-	pos := b.Pos(row, column)
-	c.SetPos(pos)
-	b.chips = append(b.chips, c)
 }

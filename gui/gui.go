@@ -33,11 +33,11 @@ func New(width, height int) *GUI {
 	winHeight := win.Bounds().H()
 	yOff := winHeight - float64(3*tileSize/4)
 
-	t := newTileSet("tiles.png", tileSize)
-	b := newBoard(win, width, height, t.get(1, 0))
-	rcf := newChipFactory(win, t.get(0, 1))
+	t := NewTileSet("tiles.png", tileSize)
+	b := NewBoard(win, width, height, t.Get(1, 0))
+	rcf := NewChipFactory(win, t.Get(0, 1))
 	rc := rcf.New()
-	bcf := newChipFactory(win, t.get(1, 1))
+	bcf := NewChipFactory(win, t.Get(1, 1))
 
 	g := GUI{
 		win:             win,
@@ -51,11 +51,11 @@ func New(width, height int) *GUI {
 	return &g
 }
 
-func (g *GUI) Closed() bool {
+func (g GUI) Closed() bool {
 	return g.win.Closed()
 }
 
-func (g *GUI) CheckForMove() int {
+func (g GUI) CheckForMove() int {
 	return g.board.CheckForMove()
 }
 
@@ -65,7 +65,7 @@ func (g *GUI) Update() {
 	g.currentChip.SetPos(pos)
 }
 
-func (g *GUI) Draw() {
+func (g GUI) Draw() {
 	g.win.Clear(colornames.Skyblue)
 	g.board.Draw()
 	g.currentChip.Draw()

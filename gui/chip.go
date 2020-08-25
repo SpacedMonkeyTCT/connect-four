@@ -10,7 +10,7 @@ type chipFactory struct {
 	sprite *pixel.Sprite
 }
 
-func newChipFactory(win *pixelgl.Window, sprite *pixel.Sprite) chipFactory {
+func NewChipFactory(win *pixelgl.Window, sprite *pixel.Sprite) chipFactory {
 	return chipFactory{
 		win:    win,
 		sprite: sprite,
