@@ -20,7 +20,7 @@ func main() {
 }
 
 func connectFour() {
-	_ = game.NewConnectFour(width, height, redPlayer, bluePlayer)
+	cf := game.NewConnectFour(width, height, redPlayer, bluePlayer)
 	g := gui.New(width, height)
 	player := redPlayer
 
@@ -28,28 +28,18 @@ func connectFour() {
 		_ = time.Since(last).Seconds()
 		last = time.Now()
 
-		if move := g.CheckForMove(); move > 0 {
-			// check move is valid with game
-			row := columnHeight(move)
-			if player == redPlayer {
-				g.AddRedChip(row, move)
-			} else {
-				g.AddBlueChip(row, move)
+		if column := g.CheckForMove(); column > 0 {
+
+			if row := cf.MakeMove(column); row > 0 {
+
+				if player == redPlayer {
+					g.AddRedChip(row, column)
+				} else {
+					g.AddBlueChip(row, column)
+				}
+				player = cf.CurrentPlayer()
 			}
-			player = swapPlayer(player)
 		}
 		g.Update()
 	}
-}
-
-func swapPlayer(player int) int {
-	return player ^ (redPlayer | bluePlayer)
-}
-
-// for testing purposes
-var columns [8]int
-
-func columnHeight(c int) int {
-	columns[c]++
-	return columns[c]
 }
