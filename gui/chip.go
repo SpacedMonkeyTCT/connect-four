@@ -17,11 +17,11 @@ func newChipFactory(win *pixelgl.Window, sprite *pixel.Sprite) chipFactory {
 	}
 }
 
-func (cf chipFactory) New(pos pixel.Vec) chip {
-	return chip{
+func (cf chipFactory) New() *chip {
+	return &chip{
 		win:    cf.win,
 		sprite: cf.sprite,
-		pos:    pos,
+		pos:    pixel.V(0, 0),
 	}
 }
 
@@ -31,6 +31,10 @@ type chip struct {
 	pos    pixel.Vec
 }
 
-func (c chip) Update() {
+func (c chip) Draw() {
 	c.sprite.Draw(c.win, pixel.IM.Moved(c.pos))
+}
+
+func (c *chip) SetPos(pos pixel.Vec) {
+	c.pos = pos
 }

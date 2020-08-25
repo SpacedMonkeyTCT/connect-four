@@ -31,11 +31,12 @@ func connectFour() {
 		if column := g.CheckForMove(); column > 0 {
 
 			if row := cf.MakeMove(column); row > 0 {
+				g.AddCurrentChipToBoard(row, column)
 
 				if player == redPlayer {
-					g.AddRedChip(row, column)
+					g.NewBlueChip()
 				} else {
-					g.AddBlueChip(row, column)
+					g.NewRedChip()
 				}
 				player = cf.CurrentPlayer()
 			}

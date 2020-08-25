@@ -11,11 +11,11 @@ const (
 )
 
 type GUI struct {
-	win      *pixelgl.Window
-	board    board
-	redChip  chipFactory
-	blueChip chipFactory
-	chips    []chip
+	win             *pixelgl.Window
+	board           *board
+	redChipFactory  chipFactory
+	blueChipFactory chipFactory
+	currentChip     *chip
 }
 
 func New(width, height int) *GUI {
@@ -33,12 +33,15 @@ func New(width, height int) *GUI {
 	t := newTileSet("tiles.png", tileSize)
 	b := newBoard(win, width, height, t.get(1, 0))
 	rcf := newChipFactory(win, t.get(0, 1))
+	rc := rcf.New()
 	bcf := newChipFactory(win, t.get(1, 1))
+
 	g := GUI{
-		win:      win,
-		board:    b,
-		redChip:  rcf,
-		blueChip: bcf,
+		win:             win,
+		board:           b,
+		redChipFactory:  rcf,
+		blueChipFactory: bcf,
+		currentChip:     rc,
 	}
 
 	return &g
@@ -53,23 +56,18 @@ func (g *GUI) CheckForMove() int {
 }
 
 func (g *GUI) Update() {
-	for _, c := range g.chips {
-		c.Update()
-	}
-	g.board.Update()
+	g.board.Draw()
 	g.win.Update()
 }
 
-func (g *GUI) AddRedChip(row, column int) {
-	g.addChip(g.redChip, row, column)
+func (g *GUI) NewRedChip() {
+	g.currentChip = g.redChipFactory.New()
 }
 
-func (g *GUI) AddBlueChip(row, column int) {
-	g.addChip(g.blueChip, row, column)
+func (g *GUI) NewBlueChip() {
+	g.currentChip = g.blueChipFactory.New()
 }
 
-func (g *GUI) addChip(cf chipFactory, row, column int) {
-	pos := g.board.Pos(row, column)
-	c := cf.New(pos)
-	g.chips = append(g.chips, c)
+func (g *GUI) AddCurrentChipToBoard(row, column int) {
+	g.board.AddChip(g.currentChip, row, column)
 }
