@@ -41,6 +41,6 @@ func connectFour() {
 				player = cf.CurrentPlayer()
 			}
 		}
-		g.Update()
+		g.Draw()
 	}
 }

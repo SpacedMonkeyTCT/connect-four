@@ -55,7 +55,7 @@ func (g *GUI) CheckForMove() int {
 	return g.board.CheckForMove()
 }
 
-func (g *GUI) Update() {
+func (g *GUI) Draw() {
 	g.board.Draw()
 	g.win.Update()
 }
