@@ -7,9 +7,9 @@ import (
 )
 
 const (
-	redPlayer  = 1
-	bluePlayer = 2
-	tileSize   = 32
+	redPlayer = 1
+	// bluePlayer = 2
+	tileSize = 32
 )
 
 type connectFour interface {
@@ -47,10 +47,9 @@ func New(game connectFour) *GUI {
 	holdY := winHeight - float64(3*tileSize/4)
 
 	t := NewTileSet("tiles.png", tileSize)
-	b := NewBoard(win, width, height, t.Get(1, 0))
-	rcf := NewChipFactory(win, t.Get(0, 1))
-	rc := rcf.New()
-	bcf := NewChipFactory(win, t.Get(1, 1))
+	b := NewBoard(win, width, height, t.GetBoardTile())
+	rcf := NewChipFactory(win, t.GetRedChip())
+	bcf := NewChipFactory(win, t.GetBlueChip())
 
 	g := GUI{
 		game:            game,
@@ -58,28 +57,24 @@ func New(game connectFour) *GUI {
 		board:           b,
 		redChipFactory:  rcf,
 		blueChipFactory: bcf,
-		currentChip:     rc,
+		currentChip:     rcf.New(),
 		holdY:           holdY,
 	}
 
 	return &g
 }
 
-func (g GUI) Closed() bool {
-	return g.win.Closed()
-}
-
 func (g *GUI) ProcessInput() {
 	if column := g.board.CheckForMove(); column > 0 {
 
 		if row := g.game.MakeMove(column); row > 0 {
-			g.AddCurrentChipToBoard(row, column)
+			g.addCurrentChipToBoard(row, column)
 			g.player = g.game.CurrentPlayer()
 
 			if g.player == redPlayer {
-				g.NewRedChip()
+				g.newRedChip()
 			} else {
-				g.NewBlueChip()
+				g.newBlueChip()
 			}
 		}
 	}
@@ -98,14 +93,18 @@ func (g GUI) Draw() {
 	g.win.Update()
 }
 
-func (g *GUI) NewRedChip() {
+func (g GUI) Closed() bool {
+	return g.win.Closed()
+}
+
+func (g *GUI) newRedChip() {
 	g.currentChip = g.redChipFactory.New()
 }
 
-func (g *GUI) NewBlueChip() {
+func (g *GUI) newBlueChip() {
 	g.currentChip = g.blueChipFactory.New()
 }
 
-func (g *GUI) AddCurrentChipToBoard(row, column int) {
+func (g *GUI) addCurrentChipToBoard(row, column int) {
 	g.board.AddChip(g.currentChip, row, column)
 }
