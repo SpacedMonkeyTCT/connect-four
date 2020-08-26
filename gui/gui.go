@@ -7,19 +7,32 @@ import (
 )
 
 const (
-	tileSize = 32
+	redPlayer  = 1
+	bluePlayer = 2
+	tileSize   = 32
 )
 
+type connectFour interface {
+	MakeMove(int) int
+	Width() int
+	Height() int
+	CurrentPlayer() int
+}
+
 type GUI struct {
+	game            connectFour
 	win             *pixelgl.Window
 	board           *board
+	player          int
+	currentChip     *chip
 	redChipFactory  chipFactory
 	blueChipFactory chipFactory
-	currentChip     *chip
 	holdY           float64
 }
 
-func New(width, height int) *GUI {
+func New(game connectFour) *GUI {
+	width := game.Width()
+	height := game.Height()
 	cfg := pixelgl.WindowConfig{
 		Title:  "Connect Four",
 		Bounds: pixel.R(0, 0, float64(tileSize*(width+1)), float64(tileSize*(height+2))),
@@ -40,6 +53,7 @@ func New(width, height int) *GUI {
 	bcf := NewChipFactory(win, t.Get(1, 1))
 
 	g := GUI{
+		game:            game,
 		win:             win,
 		board:           b,
 		redChipFactory:  rcf,
@@ -55,8 +69,20 @@ func (g GUI) Closed() bool {
 	return g.win.Closed()
 }
 
-func (g GUI) CheckForMove() int {
-	return g.board.CheckForMove()
+func (g *GUI) ProcessInput() {
+	if column := g.board.CheckForMove(); column > 0 {
+
+		if row := g.game.MakeMove(column); row > 0 {
+			g.AddCurrentChipToBoard(row, column)
+			g.player = g.game.CurrentPlayer()
+
+			if g.player == redPlayer {
+				g.NewRedChip()
+			} else {
+				g.NewBlueChip()
+			}
+		}
+	}
 }
 
 func (g *GUI) Update() {

@@ -9,10 +9,8 @@ import (
 )
 
 const (
-	redPlayer  = 1
-	bluePlayer = 2
-	width      = 7
-	height     = 6
+	width  = 7
+	height = 6
 )
 
 func main() {
@@ -20,27 +18,14 @@ func main() {
 }
 
 func connectFour() {
-	cf := game.NewConnectFour(width, height, redPlayer, bluePlayer)
-	g := gui.New(width, height)
-	player := redPlayer
+	cf := game.NewConnectFour(width, height)
+	g := gui.New(cf)
 
 	for last := time.Now(); !g.Closed(); {
 		_ = time.Since(last).Seconds()
 		last = time.Now()
 
-		if column := g.CheckForMove(); column > 0 {
-
-			if row := cf.MakeMove(column); row > 0 {
-				g.AddCurrentChipToBoard(row, column)
-
-				if player == redPlayer {
-					g.NewBlueChip()
-				} else {
-					g.NewRedChip()
-				}
-				player = cf.CurrentPlayer()
-			}
-		}
+		g.ProcessInput()
 		g.Update()
 		g.Draw()
 	}

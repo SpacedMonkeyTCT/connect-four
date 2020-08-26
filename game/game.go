@@ -3,14 +3,13 @@ package game
 import "fmt"
 
 type ConnectFour struct {
-	width   int
-	height  int
-	board   [][]int
-	players []int
-	pIndex  int
+	width  int
+	height int
+	board  [][]int
+	player int
 }
 
-func NewConnectFour(width, height int, players ...int) *ConnectFour {
+func NewConnectFour(width, height int) *ConnectFour {
 	b := make([][]int, width)
 	for x := range b {
 		b[x] = make([]int, height)
@@ -19,11 +18,10 @@ func NewConnectFour(width, height int, players ...int) *ConnectFour {
 		}
 	}
 	return &ConnectFour{
-		width:   width,
-		height:  height,
-		board:   b,
-		players: players,
-		pIndex:  0,
+		width:  width,
+		height: height,
+		board:  b,
+		player: 1,
 	}
 }
 
@@ -34,10 +32,10 @@ func (cf *ConnectFour) MakeMove(column int) int {
 	for y = 0; y < cf.height; y++ {
 		if cf.board[column-1][y] == 0 {
 			valid = true
-			cf.board[column-1][y] = cf.players[cf.pIndex]
-			fmt.Println("Player", cf.players[cf.pIndex])
-			cf.pIndex = (cf.pIndex + 1) % len(cf.players)
-			fmt.Println("becomes", cf.players[cf.pIndex])
+			cf.board[column-1][y] = cf.player
+			fmt.Println("Player", cf.player)
+			cf.player = cf.player ^ 3
+			fmt.Println("becomes", cf.player)
 			break
 		}
 	}
@@ -47,6 +45,14 @@ func (cf *ConnectFour) MakeMove(column int) int {
 	return y + 1
 }
 
+func (cf *ConnectFour) Width() int {
+	return cf.width
+}
+
+func (cf *ConnectFour) Height() int {
+	return cf.height
+}
+
 func (cf *ConnectFour) CurrentPlayer() int {
-	return cf.players[cf.pIndex]
+	return cf.player
 }
