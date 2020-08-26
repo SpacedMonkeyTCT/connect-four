@@ -9,8 +9,8 @@ import (
 )
 
 const (
-	width  = 7
-	height = 6
+	columns = 7
+	rows    = 6
 )
 
 func main() {
@@ -18,7 +18,7 @@ func main() {
 }
 
 func connectFour() {
-	cf := game.NewConnectFour(width, height)
+	cf := game.NewConnectFour(columns, rows)
 	g := gui.New(cf)
 
 	for last := time.Now(); !g.Closed(); {

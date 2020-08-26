@@ -9,22 +9,22 @@ import (
 
 type board struct {
 	win      *pixelgl.Window
-	width    int
-	height   int
+	columns  int
+	rows     int
 	tile     *pixel.Sprite
 	tileSize float64
 	rect     pixel.Rect
 	chips    []*chip
 }
 
-func NewBoard(win *pixelgl.Window, width, height int, tile *pixel.Sprite) *board {
+func NewBoard(win *pixelgl.Window, columns, rows int, tile *pixel.Sprite) *board {
 	wb := win.Bounds()
 	windowWidth := wb.W()
 	windowHeight := wb.H()
 
 	size := tile.Frame().W()
-	boardWidth := float64(width) * size
-	boardHeight := float64(height) * size
+	boardWidth := float64(columns) * size
+	boardHeight := float64(rows) * size
 
 	xoff := math.Max(0, (windowWidth-boardWidth)/2.0)
 	yoff := math.Max(0, (windowHeight-boardHeight)/2.0) - size/2
@@ -32,8 +32,8 @@ func NewBoard(win *pixelgl.Window, width, height int, tile *pixel.Sprite) *board
 
 	return &board{
 		win:      win,
-		width:    width,
-		height:   height,
+		columns:  columns,
+		rows:     rows,
 		tile:     tile,
 		tileSize: size,
 		rect:     rect,
@@ -46,8 +46,8 @@ func (b board) CheckForMove() int {
 		if b.rect.Contains(b.win.MousePosition()) {
 			f := math.Floor((b.win.MousePosition().X - b.rect.Min.X) / b.tileSize)
 			i := int(f) + 1
-			if i > b.width {
-				i = b.width
+			if i > b.columns {
+				i = b.columns
 			}
 			return i
 		}
@@ -68,7 +68,7 @@ func (b board) Draw() {
 	}
 }
 
-func (b *board) AddChip(c *chip, row, column int) {
+func (b *board) AddChip(c *chip, column, row int) {
 	x := b.Xpos(column)
 	y := b.Ypos(row)
 	pos := pixel.V(x, y)
