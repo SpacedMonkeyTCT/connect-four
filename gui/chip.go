@@ -22,6 +22,8 @@ func (cf chipFactory) New() *chip {
 		win:    cf.win,
 		sprite: cf.sprite,
 		pos:    pixel.V(0, 0),
+		vel:    pixel.V(0, 0),
+		acc:    pixel.V(0, 0),
 	}
 }
 
@@ -29,6 +31,8 @@ type chip struct {
 	win    *pixelgl.Window
 	sprite *pixel.Sprite
 	pos    pixel.Vec
+	vel    pixel.Vec
+	acc    pixel.Vec
 }
 
 func (c chip) Draw() {

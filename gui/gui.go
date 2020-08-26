@@ -16,7 +16,7 @@ type GUI struct {
 	redChipFactory  chipFactory
 	blueChipFactory chipFactory
 	currentChip     *chip
-	yOff            float64
+	holdY           float64
 }
 
 func New(width, height int) *GUI {
@@ -31,7 +31,7 @@ func New(width, height int) *GUI {
 	}
 
 	winHeight := win.Bounds().H()
-	yOff := winHeight - float64(3*tileSize/4)
+	holdY := winHeight - float64(3*tileSize/4)
 
 	t := NewTileSet("tiles.png", tileSize)
 	b := NewBoard(win, width, height, t.Get(1, 0))
@@ -45,7 +45,7 @@ func New(width, height int) *GUI {
 		redChipFactory:  rcf,
 		blueChipFactory: bcf,
 		currentChip:     rc,
-		yOff:            yOff,
+		holdY:           holdY,
 	}
 
 	return &g
@@ -61,7 +61,7 @@ func (g GUI) CheckForMove() int {
 
 func (g *GUI) Update() {
 	x := g.win.MousePosition().X
-	pos := pixel.V(x, g.yOff)
+	pos := pixel.V(x, g.holdY)
 	g.currentChip.SetPos(pos)
 }
 
