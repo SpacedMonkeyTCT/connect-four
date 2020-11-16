@@ -26,23 +26,15 @@ func NewConnectFour(columns, rows int) *ConnectFour {
 }
 
 func (cf *ConnectFour) MakeMove(column int) int {
-	var y int
-	valid := false
-	fmt.Println(cf.board[column-1])
-	for y = 0; y < cf.rows; y++ {
+	for y := 0; y < cf.rows; y++ {
 		if cf.board[column-1][y] == 0 {
-			valid = true
 			cf.board[column-1][y] = cf.player
-			fmt.Println("Player", cf.player)
 			cf.player = cf.player ^ 3
-			fmt.Println("becomes", cf.player)
-			break
+			fmt.Println(cf.board[column-1])
+			return y + 1
 		}
 	}
-	if !valid {
-		return 0
-	}
-	return y + 1
+	return 0
 }
 
 func (cf *ConnectFour) Columns() int {
