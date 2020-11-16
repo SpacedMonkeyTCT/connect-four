@@ -70,7 +70,7 @@ func (g *GUI) ProcessInput() {
 }
 
 func (g *GUI) Update() {
-	if dropped := g.currentChip.Update(g.ceiling); dropped {
+	if dropped := g.currentChip.Update(); dropped {
 		g.board.AddChip(g.currentChip, g.column, g.row)
 		g.currentChip = g.newChip(g.game.CurrentPlayer())
 	}

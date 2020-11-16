@@ -37,7 +37,7 @@ type chip struct {
 	floor  float64
 }
 
-func (c *chip) Update(ceiling float64) bool {
+func (c *chip) Update() bool {
 	if c.floor > 0.0 {
 		return c.fall()
 	}
