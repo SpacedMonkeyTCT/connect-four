@@ -25,8 +25,10 @@ type GUI struct {
 	board           *board
 	redChipFactory  chipFactory
 	blueChipFactory chipFactory
-	holdY           float64
+	ceiling         float64
 	currentChip     *chip
+	column          int
+	row             int
 }
 
 func New(game connectFour) *GUI {
@@ -41,7 +43,7 @@ func New(game connectFour) *GUI {
 		board:           NewBoard(window, columns, rows, t.GetBoardTile()),
 		redChipFactory:  NewChipFactory(window, t.GetRedChip()),
 		blueChipFactory: NewChipFactory(window, t.GetBlueChip()),
-		holdY:           window.Bounds().H() - float64(3*tileSize/4),
+		ceiling:         window.Bounds().H() - float64(3*tileSize/4),
 	}
 	g.currentChip = g.newChip(game.CurrentPlayer())
 
@@ -52,22 +54,32 @@ func (g *GUI) ProcessInput() {
 	if column := g.board.CheckForMove(); column > 0 {
 
 		if row := g.game.MakeMove(column); row > 0 {
-			g.board.AddChip(g.currentChip, column, row)
-			g.currentChip = g.newChip(g.game.CurrentPlayer())
+			// align chip to column
+			x := g.board.Xpos(column)
+			g.currentChip.SetXPos(x)
+
+			// drop chip to floor
+			y := g.board.Ypos(row)
+			g.currentChip.Drop(y)
+
+			// store for adding to the board after drop completes
+			g.column = column
+			g.row = row
 		}
 	}
 }
 
 func (g *GUI) Update() {
-	x := g.window.MousePosition().X
-	pos := pixel.V(x, g.holdY)
-	g.currentChip.SetPos(pos)
+	if dropped := g.currentChip.Update(g.ceiling); dropped {
+		g.board.AddChip(g.currentChip, g.column, g.row)
+		g.currentChip = g.newChip(g.game.CurrentPlayer())
+	}
 }
 
 func (g GUI) Draw() {
 	g.window.Clear(colornames.Skyblue)
-	g.board.Draw()
 	g.currentChip.Draw()
+	g.board.Draw()
 	g.window.Update()
 }
 
@@ -76,10 +88,11 @@ func (g GUI) Closed() bool {
 }
 
 func (g GUI) newChip(player int) *chip {
+	pos := pixel.V(g.window.MousePosition().X, g.ceiling)
 	if player == redPlayer {
-		return g.redChipFactory.New()
+		return g.redChipFactory.New(pos)
 	}
-	return g.blueChipFactory.New()
+	return g.blueChipFactory.New(pos)
 }
 
 func newWindow(columns, rows, tileSize int) *pixelgl.Window {
