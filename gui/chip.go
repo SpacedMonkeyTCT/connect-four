@@ -66,6 +66,10 @@ func (c *chip) Drop(floor float64) {
 	c.acc = pixel.V(0, -1)
 }
 
+func (c chip) Dropping() bool {
+	return c.floor > 0
+}
+
 func (c *chip) fall() bool {
 	c.vel = c.vel.Add(c.acc)
 	c.pos = c.pos.Add(c.vel)

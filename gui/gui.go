@@ -51,6 +51,10 @@ func New(game connectFour) *GUI {
 }
 
 func (g *GUI) ProcessInput() {
+	if g.currentChip.Dropping() {
+		return
+	}
+
 	if column := g.board.CheckForMove(); column > 0 {
 
 		if row := g.game.MakeMove(column); row > 0 {
