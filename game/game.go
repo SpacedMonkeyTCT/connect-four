@@ -1,7 +1,5 @@
 package game
 
-import "fmt"
-
 type ConnectFour struct {
 	columns int
 	rows    int
@@ -13,9 +11,6 @@ func NewConnectFour(columns, rows int) *ConnectFour {
 	b := make([][]int, columns)
 	for x := range b {
 		b[x] = make([]int, rows)
-		for y := range b[x] {
-			b[x][y] = 0
-		}
 	}
 	return &ConnectFour{
 		columns: columns,
@@ -29,12 +24,15 @@ func (cf *ConnectFour) MakeMove(column int) int {
 	for y := 0; y < cf.rows; y++ {
 		if cf.board[column-1][y] == 0 {
 			cf.board[column-1][y] = cf.player
-			cf.player = cf.player ^ 3
-			fmt.Println(cf.board[column-1])
+			cf.swapPlayers()
 			return y + 1
 		}
 	}
 	return 0
+}
+
+func (cf *ConnectFour) swapPlayers() {
+	cf.player = cf.player ^ 3
 }
 
 func (cf *ConnectFour) Columns() int {
