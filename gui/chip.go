@@ -57,13 +57,13 @@ func (c *chip) SetXPos(x float64) {
 	c.pos.X = x
 }
 
+func (c *chip) slide() {
+	c.pos.X = c.win.MousePosition().X
+}
+
 func (c *chip) Drop(floor float64) {
 	c.floor = floor
 	c.acc = pixel.V(0, -1)
-}
-
-func (c *chip) slide() {
-	c.pos.X = c.win.MousePosition().X
 }
 
 func (c *chip) fall() bool {
