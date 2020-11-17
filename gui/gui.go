@@ -45,7 +45,7 @@ func New(game connectFour) *GUI {
 		blueChipFactory: NewChipFactory(window, t.GetBlueChip()),
 		ceiling:         window.Bounds().H() - float64(3*tileSize/4),
 	}
-	g.currentChip = g.newChip(game.CurrentPlayer())
+	g.currentChip = g.newChip()
 
 	return g
 }
@@ -72,7 +72,7 @@ func (g *GUI) ProcessInput() {
 func (g *GUI) Update() {
 	if dropped := g.currentChip.Update(); dropped {
 		g.board.AddChip(g.currentChip, g.column, g.row)
-		g.currentChip = g.newChip(g.game.CurrentPlayer())
+		g.currentChip = g.newChip()
 	}
 }
 
@@ -87,9 +87,9 @@ func (g GUI) Closed() bool {
 	return g.window.Closed()
 }
 
-func (g GUI) newChip(player int) *chip {
+func (g GUI) newChip() *chip {
 	pos := pixel.V(g.window.MousePosition().X, g.ceiling)
-	if player == redPlayer {
+	if g.game.CurrentPlayer() == redPlayer {
 		return g.redChipFactory.New(pos)
 	}
 	return g.blueChipFactory.New(pos)
