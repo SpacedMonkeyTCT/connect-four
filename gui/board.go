@@ -1,8 +1,6 @@
 package gui
 
 import (
-	"math"
-
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 )
@@ -26,8 +24,8 @@ func NewBoard(win *pixelgl.Window, columns, rows int, tile *pixel.Sprite) *board
 	boardWidth := float64(columns) * size
 	boardHeight := float64(rows) * size
 
-	xoff := math.Max(0, (windowWidth-boardWidth)/2.0)
-	yoff := math.Max(0, (windowHeight-boardHeight)/2.0) - size/2
+	xoff := (windowWidth - boardWidth) / 2.0
+	yoff := (windowHeight-boardHeight)/2.0 - size/2
 	rect := pixel.R(xoff, yoff, xoff+boardWidth, yoff+boardHeight)
 
 	return &board{
@@ -44,12 +42,11 @@ func (b board) CheckForMove() int {
 	if b.win.JustPressed(pixelgl.MouseButtonLeft) {
 
 		if b.rect.Contains(b.win.MousePosition()) {
-			f := math.Floor((b.win.MousePosition().X - b.rect.Min.X) / b.tileSize)
-			i := int(f) + 1
-			if i > b.columns {
-				i = b.columns
+			column := int((b.win.MousePosition().X-b.rect.Min.X)/b.tileSize) + 1
+			if column > b.columns {
+				return b.columns
 			}
-			return i
+			return column
 		}
 	}
 	return 0
