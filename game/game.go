@@ -21,7 +21,7 @@ func NewConnectFour(columns, rows int) *ConnectFour {
 }
 
 func (cf *ConnectFour) MakeMove(column int) int {
-	for row := 0; row < cf.rows; row++ {
+	for row := range cf.board[column-1] {
 		if cf.board[column-1][row] == 0 {
 			cf.board[column-1][row] = cf.player
 			cf.swapPlayers()
@@ -54,48 +54,36 @@ func (cf *ConnectFour) CheckForWin() int {
 }
 
 func (cf *ConnectFour) horizontalLineLen(col, row int) int {
-	player := cf.board[col][row]
-	l := 0
-	for c := col; c < len(cf.board); c++ {
-		if cf.board[c][row] != player {
-			break
-		}
-		l++
-	}
-	return l
+	return cf.lineLen(col, row, 1, 0)
 }
 
 func (cf *ConnectFour) verticalLineLen(col, row int) int {
-	player := cf.board[col][row]
-	l := 0
-	for r := row; r < len(cf.board[col]); r++ {
-		if cf.board[col][r] != player {
-			break
-		}
-		l++
-	}
-	return l
+	return cf.lineLen(col, row, 0, 1)
 }
 
 func (cf *ConnectFour) diagonalUpLineLen(col, row int) int {
-	player := cf.board[col][row]
-	l := 0
-	for c, r := col, row; c < len(cf.board) && r < len(cf.board[c]); c, r = c+1, r+1 {
-		if cf.board[c][r] != player {
-			break
-		}
-		l++
-	}
-	return l
+	return cf.lineLen(col, row, 1, 1)
 }
 
 func (cf *ConnectFour) diagonalDownLineLen(col, row int) int {
+	return cf.lineLen(col, row, 1, -1)
+}
+
+func (cf *ConnectFour) lineLen(col, row, dc, dr int) int {
 	player := cf.board[col][row]
 	l := 0
-	for c, r := col, row; c < len(cf.board) && r >= 0; c, r = c+1, r-1 {
-		if cf.board[c][r] != player {
+	for {
+		if col < 0 || col >= cf.columns {
 			break
 		}
+		if row < 0 || row >= cf.rows {
+			break
+		}
+		if cf.board[col][row] != player {
+			break
+		}
+		col += dc
+		row += dr
 		l++
 	}
 	return l
