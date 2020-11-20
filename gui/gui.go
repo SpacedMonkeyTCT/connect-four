@@ -1,6 +1,8 @@
 package gui
 
 import (
+	"fmt"
+
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 	"golang.org/x/image/colornames"
@@ -14,6 +16,7 @@ const (
 
 type connectFour interface {
 	MakeMove(int) int
+	CheckForWin() int
 	Columns() int
 	Rows() int
 	CurrentPlayer() int
@@ -74,6 +77,9 @@ func (g *GUI) ProcessInput() {
 }
 
 func (g *GUI) Update() {
+	if winner := g.game.CheckForWin(); winner > 0 {
+		fmt.Println("Winner was player:", winner)
+	}
 	if dropped := g.currentChip.Update(); dropped {
 		g.board.AddChip(g.currentChip, g.column, g.row)
 		g.currentChip = g.newChip()
